@@ -1,26 +1,51 @@
+//1005. Куча камней
 #include<bits/stdc++.h>
 #include <limits>
 #include <iostream>
 using namespace std;
-main(){
-	int n,a[21],min_dif = numeric_limits<int>::max(),max;
-	cin >> n;
-	max = 1 << n-1;
-	for(int i=0; i<n;i++)
-		cin >> a[i];
-	for(int i=0; i<=max;i++){
-		int tmp = i;
-		int pile0 = 0,pile1 = 0;
-		for(int j=0; j<n; j++){
-			if((tmp & 0x1) == 0)
-				pile0+=a[j];
-			else
-				pile1+=a[j];
-			tmp = tmp >> 1;
-		}
-		if(min_dif > abs(pile0-pile1))
-			min_dif = abs(pile0-pile1);
-	}
-	cout << min_dif;
-	return 0;
+main() {
+    // Объявляем переменные:
+    // n - количество камней
+    // a[21] - массив с весами камней
+    // min_dif - минимальная разница весов двух куч. Изначально устанавливаем максимальное значение.
+    int n, a[21], min_dif = numeric_limits<int>::max(), max;
+
+    // Считываем количество камней
+    cin >> n;
+
+    // max - максимальное количество комбинаций распределения камней (2^n)
+    max = 1 << n-1;
+
+    // Считываем веса камней
+    for(int i = 0; i < n; i++)
+        cin >> a[i];
+
+    // Перебор всех возможных комбинаций распределения камней между двумя кучами
+    for(int i = 0; i <= max; i++) {
+        int tmp = i;
+        // pile0 и pile1 - веса камней в двух кучах для текущей комбинации
+        int pile0 = 0, pile1 = 0;
+
+        // Перебор каждого камня и распределение его между одной из куч
+        for(int j = 0; j < n; j++) {
+            // Проверяем последний бит в tmp.
+            // Если он равен 0, добавляем камень в pile0, иначе - в pile1.
+            if((tmp & 0x1) == 0)
+                pile0 += a[j];
+            else
+                pile1 += a[j];
+
+            // Сдвигаем tmp на один бит вправо для проверки следующего камня
+            tmp = tmp >> 1;
+        }
+
+        // Если текущая разница между кучами меньше уже найденной минимальной разницы, обновляем min_dif
+        if(min_dif > abs(pile0 - pile1))
+            min_dif = abs(pile0 - pile1);
+    }
+
+    // Выводим найденную минимальную разницу
+    cout << min_dif;
+
+    return 0;
 }

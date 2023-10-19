@@ -1,48 +1,69 @@
+//2025. Стенка на стенку
 #include<bits/stdc++.h>
 #include <limits>
 #include <iostream>
 using namespace std;
+
+// Функция, вычисляющая количество схваток между командами
 int solve(int n, int k);
+
+// Функция для расчета схваток, когда все команды имеют одинаковое количество участников
 int match(int x, int n);
+
+// Функция для расчета схваток, когда команды имеют разное количество участников
 int match(int x, int y, int n, int k, int total);
-main(){
-	int n,a[100];
-	cin >> n;
-	for(int i=0; i<n*2;i++){
-		cin >> a[i];
-	}
-	for(int i=0; i<n*2;i+=2){
-		cout << solve(a[i],a[i+1])<< endl;
-	}
-	return 0;
+
+int main(){
+    int n,a[100];
+
+    // Вводим количество тестов
+    cin >> n;
+
+    // Считываем данные для каждого теста
+    for(int i=0; i<n*2;i++){
+        cin >> a[i];
+    }
+
+    // Обрабатываем и выводим результаты для каждого теста
+    for(int i=0; i<n*2;i+=2){
+        cout << solve(a[i],a[i+1])<< endl;
+    }
+    return 0;
 }
+
 int solve(int n, int k){
-	int res,x,y;
-	x = n / k; 
-	y = n % k;
-	if(y!=0) return match(x,x+1,k-y,y,n);
-	else return match(x,k);
+    int res,x,y;
+
+    // Определение базового количества участников в команде
+    x = n / k; 
+    // Определение количества участников, которые не могут быть равномерно распределены по командам
+    y = n % k;
+
+    // Если y не равно 0, это означает, что команды имеют разное количество участников
+    if(y!=0) 
+        return match(x,x+1,k-y,y,n); // Обрабатываем этот случай
+    else 
+        return match(x,k); // Обрабатываем случай, когда у всех команд одинаковое количество участников
 }
-int match(int x, int y, int n, int k, int total){
-	int sum_1 = 0;
-	int tmp = total;
-	while(tmp > 0){
-		for(int i=1; i<=n;i++){
-			sum_1 += (total-x)*x;
-			tmp-=x;
-		}
-	
-		for(int i=1; i<=k;i++){
-			sum_1 += (total-y)*y;
-			tmp-=y;
-		}
-	}
-	return sum_1/2;
-}
+
 int match(int x, int n){
-	int sum = 0;
-	for(int i=n-1; i>0;i--){
-		sum += pow(x,2)*i;
-	}
-	return sum;
+    int sum = 0;
+
+    // Вычисление количества схваток для команд с одинаковым количеством участников
+    for(int i=n-1; i>0;i--){
+        sum += pow(x,2)*i;
+    }
+    return sum;
+}
+
+int match(int x, int y, int n, int k, int total){
+    int sum_1 = 0;
+
+    // Вычисление количества схваток для команд с x участниками
+    sum_1 += n * (total - x) * x;
+  
+    // Вычисление количества схваток для команд с y участниками
+    sum_1 += k * (total - y) * y;
+  
+    return sum_1 / 2;  // деление на 2, чтобы избежать двойного учета каждой схватки
 }

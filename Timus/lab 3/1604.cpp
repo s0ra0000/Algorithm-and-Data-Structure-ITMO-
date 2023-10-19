@@ -1,34 +1,39 @@
+//1604. В Стране Дураков
 #include <algorithm>
 #include <iostream>
 using namespace std;
+
+// Структура для представления знака с ограничением скорости
 struct obstacle{
-  int count;
-  int num;
+  int count; // Количество таких знаков
+  int num;   // Номер (или тип) этого знака
 };
+
 const int MAXNUM = 10010;
-obstacle o[MAXNUM];
-int ans[MAXNUM][MAXNUM];
+obstacle o[MAXNUM];      // Массив для хранения информации о знаках
+int ans[MAXNUM][MAXNUM]; // Двумерный массив для хранения порядка установки знаков
 
-bool cmp(obstacle a, obstacle b);
-void solve(int n);
-
-int main()
-{
-	int n;
-	cin >> n;
-	solve(n);
-	return 0;
+// Функция сравнения для сортировки массива знаков по убыванию количества
+bool cmp(obstacle a, obstacle b) {
+	return (a.count > b.count);
 }
-void solve(int n){
+
+// Функция решения задачи
+void solve(int n) {
+	// Чтение количества каждого типа знака и его номера (типа)
 	for (int i = 0; i < n; i++) {
 	    cin >> o[i].count;
 	    o[i].num = i + 1;
   	}
+	
+	// Сортировка массива знаков по убыванию количества каждого знака
 	sort(o, o + n, cmp);
+	
+	// Распределение знаков по строкам и столбцам
 	int m = o[0].count;
 	int t = 0;
-	for (int i = 0; i < n&&t<n; i++){
-		for (int j = 0; j < m;j++) {
+	for (int i = 0; i < n && t < n; i++) {
+		for (int j = 0; j < m; j++) {
 	    	if (o[t].count > 0) {
 	    		ans[i][j] = o[t].num;
 	        	o[t].count--;
@@ -37,6 +42,8 @@ void solve(int n){
 				t++;
 		}
 	}
+	
+	// Вывод порядка знаков на экран
 	for (int i = 0; i < m; i++) {
 		for (int j = 0; j < n; j++) {
 	    	if (ans[j][i] == 0)
@@ -47,6 +54,10 @@ void solve(int n){
 	}
 }
 
-bool cmp(obstacle a, obstacle b) {
-	return (a.count > b.count);
+// Основная функция
+int main() {
+	int n; // Количество различных типов знаков
+	cin >> n;
+	solve(n); // Вызов функции решения
+	return 0;
 }
